@@ -6,7 +6,7 @@
 - name: Create content folder
   file:
     path: /var/www/{{server_settings.domain}}
-    mode: 644
+    mode: 0755
     state: directory
 
 - name: Copy site content
@@ -23,6 +23,12 @@
   copy:
     src: log_format.conf
     dest: /etc/nginx/conf.d/log_format.conf
+
+- name: Copy site ex_config
+  template:
+    src: Ex_VladPage.ru.j2
+    dest: /etc/nginx/sites-available/VladPage.ru
+    mode: 0644
 
 - name: Create simlink
   file:
@@ -48,12 +54,6 @@
   stat:
     path: /etc/letsencrypt/live/{{server_settings.domain}}/fullchain.pem
   register: cert_exists
-
-- name: Copy site ex_config
-  template:
-    src: Ex_VladPage.ru.j2
-    dest: /etc/nginx/sites-available/VladPage.ru
-    mode: 0644
 
 - name: Create cert with webroot
   when: cert_exists.stat.exists == False
