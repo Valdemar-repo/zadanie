@@ -9,13 +9,17 @@
     mode: 644
     state: directory
 
-- name: Copy site content, nginx.conf, log_format
+- name: Copy site content
   copy:
     src: index.nginx-debian.html
     dest: /var/www/{{server_settings.domain}}/index.nginx-debian.html
+
+- name: Copy nginx.conf
   copy:
     src: nginx.conf
     dest: /etc/nginx/nginx.conf
+
+- name: Copy log_format
   copy:
     src: log_format.conf
     dest: /etc/nginx/conf.d/log_format.conf
