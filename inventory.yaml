@@ -1,0 +1,6 @@
+host_group:
+  hosts:
+    my_host_01:
+      ansible_host: 192.168.85.129
+      ansible_user: root
+      ansible_private_key_file: /root/.ssh/id_ed25519

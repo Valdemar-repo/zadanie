@@ -1,0 +1,56 @@
+- name: Install nginx
+  apt:
+    name: nginx
+    state: latest
+
+- name: Create content folder
+  file:
+    path: /var/www/{{server_settings.domain}}
+    mode: 644
+    state: directory
+
+- name: Copy site content, nginx.conf, log_format
+  copy:
+    src: index.nginx-debian.html
+    dest: /var/www/{{server_settings.domain}}/index.nginx-debian.html
+  copy:
+    src: nginx.conf
+    dest: /etc/nginx/nginx.conf
+  copy:
+    src: log_format.conf
+    dest: /etc/nginx/conf.d/log_format.conf
+
+- name: Copy site config
+  template:
+    src: VladPage.ru.j2
+    dest: /etc/nginx/sites-available/VladPage.ru
+    mode: 0644
+
+- name: Create simlink
+  file:
+    src: /etc/nginx/sites-available/VladPage.ru
+    dest: /etc/nginx/sites-enabled/VladPage.ru
+    state: link
+
+
+- name: Remove default conf and site content
+  file:
+    path: 
+      - /etc/nginx/sites-available/default
+      - /etc/nginx/sites-enabled/default
+      - /var/www/html
+    state: absent
+
+- name: Install certbot
+  snap:
+    name: certbot
+    state: present
+
+- name: Check cert
+  stat:
+    path: /etc/letsencrypt/live/{{server_settings.domain}}/fullchain.pem
+  register: cert_exists
+
+- name: Create cert with webroot
+  when: cert_exists.stat.exists == False
+  shell: certbot certonly --webroot --email {{certbot.email}} --agree-tos --non-interactive --webroot-path /var/www/{{server_settings.domain}} --domains {{server_settings.domain}}
