@@ -37,12 +37,22 @@
     state: link
 
 
-- name: Remove default conf and site content
+- name: Remove default conf
   file:
     path: 
-      - /etc/nginx/sites-available/default
-      - /etc/nginx/sites-enabled/default
-      - /var/www/html
+      /etc/nginx/sites-available/default
+    state: absent
+
+- name: Remove default simlink
+  file:
+    path: 
+      /etc/nginx/sites-enabled/default
+    state: absent
+
+- name: Remove site content
+  file:
+    path:
+      /var/www/html
     state: absent
 
 - name: Install certbot
