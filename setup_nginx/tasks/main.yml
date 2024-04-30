@@ -49,14 +49,14 @@
       /etc/nginx/sites-enabled/default
     state: absent
 
-- name: Remove site content
+- name: Remove default site content
   file:
     path:
       /var/www/html
     state: absent
 
 - name: Install certbot
-  snap:
+  apt:
     name: certbot
     state: present
 
@@ -64,6 +64,11 @@
   stat:
     path: /etc/letsencrypt/live/{{server_settings.domain}}/fullchain.pem
   register: cert_exists
+
+- name: Restart nginx
+  service:
+    name: nginx
+    state: restarted
 
 - name: Create cert with webroot
   when: cert_exists.stat.exists == False
@@ -74,3 +79,8 @@
     src: VladPage.ru.j2
     dest: /etc/nginx/sites-available/VladPage.ru
     mode: 0644
+
+- name: Restart nginx
+  service:
+    name: nginx
+    state: restarted

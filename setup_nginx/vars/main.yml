@@ -1,5 +1,5 @@
 server_settings:
-  domain: velichaishiy.uberlegenheit.ru
+  domain: biba.uberlegenheit.ru
 
 certbot:
   email: vladislavkachalo@gmail.com
