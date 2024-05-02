@@ -1,5 +1,0 @@
-- name: Restart nginx
-  when: changed
-  service:
-    name: nginx
-    state: restarted

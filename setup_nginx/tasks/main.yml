@@ -3,6 +3,11 @@
     upgrade: yes
     update_cache: yes
 
+- name: Check cert
+  stat:
+    path: /etc/letsencrypt/live/{{server_settings.domain}}/fullchain.pem
+  register: cert_exists
+
 - name: Install nginx
   apt:
     name: nginx
@@ -29,9 +34,10 @@
     src: log_format.conf
     dest: /etc/nginx/conf.d/log_format.conf
 
-- name: Copy site ex_config
+- name: Copy site temp_config
+  when: cert_exists.stat.exists == False
   template:
-    src: Ex_VladPage.ru.j2
+    src: VladPage.ru.j2
     dest: /etc/nginx/sites-available/VladPage.ru
     mode: 0644
 
@@ -64,11 +70,6 @@
   apt:
     name: certbot
     state: present
-
-- name: Check cert
-  stat:
-    path: /etc/letsencrypt/live/{{server_settings.domain}}/fullchain.pem
-  register: cert_exists
 
 - name: Restart nginx
   service:
