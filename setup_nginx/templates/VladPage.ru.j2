@@ -2,19 +2,20 @@ server {
         listen 80;
         listen [::]:80;
         server_name {{server_settings.domain}};
-{% if cert_exists.stat.exists == True %}        return 301 https://{{server_settings.domain}};
-{% endif %}
+{% if cert_exists.stat.exists == True %}
+        return 301 https://{{server_settings.domain}};
 }
 
-{% if cert_exists.stat.exists == True %}        server {
+        server {
         listen 443 ssl;
         listen [::]:443 ssl;
-{% endif %}
         server_name {{server_settings.domain}};
+{% endif %}
         root /var/www/{{server_settings.domain}};
         index index.html index.nginx-debian.html;
 
-{% if cert_exists.stat.exists == True %}        ssl_certificate /etc/letsencrypt/live/{{server_settings.domain}}/fullchain.pem;
+{% if cert_exists.stat.exists == True %}
+        ssl_certificate /etc/letsencrypt/live/{{server_settings.domain}}/fullchain.pem;
         ssl_certificate_key /etc/letsencrypt/live/{{server_settings.domain}}/privkey.pem;
 {% endif %}
         access_log /var/log/nginx/{{server_settings.domain}}_access.log short;
