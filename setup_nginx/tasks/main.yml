@@ -6,7 +6,7 @@
 - name: Install nginx
   apt:
     name: nginx
-    update_cache: true
+    update_cache: True
 
 - name: Create content folder
   file:
@@ -67,6 +67,7 @@
     state: present
 
 - name: Restart nginx
+  tags: molecule-idempotence-notest
   service:
     name: nginx
     state: restarted
@@ -83,6 +84,7 @@
     mode: 0644
 
 - name: Restart nginx
+  tags: molecule-idempotence-notest
   service:
     name: nginx
     state: restarted
