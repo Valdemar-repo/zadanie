@@ -26,7 +26,7 @@ provisioner:
   lint:
     name: ansible-lint
   playbooks:
-    converge: ../../zadacha.yaml
+    converge: ../../playbook.yml
   config_options:
     defaults:
       interpreter_python: auto_silent
