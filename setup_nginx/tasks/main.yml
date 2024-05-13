@@ -8,6 +8,13 @@
     name: nginx
     update_cache: True
 
+- name: Start nginx
+  service:
+    name: nginx
+    state: started
+    enabled: yes
+
+
 - name: Create content folder
   file:
     path: /var/www/{{server_settings.domain}}
