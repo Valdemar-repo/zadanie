@@ -8,6 +8,11 @@
     name: nginx
     update_cache: True
 
+- name: Install netstat for tests
+  when: molecule_file is defined
+  apt:
+    name: net-tools
+
 - name: Start nginx
   service:
     name: nginx
