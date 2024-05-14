@@ -15,17 +15,13 @@ def test_nginx_proc(host):
 def test_socket_80(host):
     """Checking nginx on port 80."""
     cmd = "netstat -tupln | grep :80"
-    output = host.run(cmd)
     run = host.run(cmd)
-    assert output.rc == 0
-    if "nginx" not in output.stdout:
-        raise AssertionError("No Nginx in port 80")
+    assert run.rc == 0
+    assert "nginx" in run.stdout
 
 def test_socket_443(host):
     """Checking nginx on port 443."""
     cmd = "netstat -tupln | grep :443"
-    output = host.run(cmd)
     run = host.run(cmd)
-    assert output.rc == 0
-    if "nginx" not in output.stdout:
-        raise AssertionError("No Nginx in port 443")
+    assert run.rc == 0
+    assert "nginx" in run.stdout
